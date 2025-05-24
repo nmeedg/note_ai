@@ -1,0 +1,9 @@
+#appbar {
+  --webkit-app-region: drag !important;
+  /* user-select: none; */
+  app-region: drag;
+}
+button,input {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
