@@ -8,10 +8,11 @@ import {
 } from "@fluentui/react-nav-preview";
 
 import {
-  Label,
   makeStyles,
   tokens,
   useRestoreFocusTarget,
+  Text,
+  Input
 } from "@fluentui/react-components";
 import {
   Board20Filled,
@@ -28,8 +29,11 @@ import {
   MailAllRead20Filled,
   Prompt20Filled,
   MailAllRead20Regular,
-  Prompt20Regular
+  Prompt20Regular,
+  Folder48Regular,
+  Search16Regular
 } from "@fluentui/react-icons";
+import { Content } from './Content';
 
 const useStyles = makeStyles({
   root: {
@@ -51,7 +55,7 @@ const useStyles = makeStyles({
   },
   navExpanded: {
     backgroundColor: 'transparent',
-    width: "250px",
+    width: "200px",
     transition: "width 0.5s ease",
   },
   navBody: {
@@ -68,8 +72,6 @@ const useStyles = makeStyles({
     alignItems: 'center'
   },
     content: {
-    padding: "16px",
-    marginTop: tokens.spacingVerticalM,
     backgroundColor: tokens.colorNeutralBackground1,
     display: "flex",  
     flexGrow: 1,
@@ -81,11 +83,19 @@ const useStyles = makeStyles({
     borderTopLeftRadius: tokens.borderRadiusXLarge,
     borderTopColor:tokens.colorNeutralStroke2,
   },
-    // flex: "1",
-    // padding: "16px",
-    // display: "grid",
-    // justifyContent: "flex-start",
-    // alignItems: "flex-start",
+  noteContainer : {
+    width: "250px",
+    display: "flex",
+    borderRadius: tokens.borderRadiusMedium,
+    borderRightStyle: "solid",
+    borderRightWidth: tokens.strokeWidthThin,
+    borderRightColor: tokens.colorNeutralStroke2,
+    flexDirection: "column",
+    padding: tokens.spacingVerticalXL,
+  },
+  editorContainer: {
+    padding: tokens.spacingVerticalM
+  },
   field: {
     display: "flex",
     marginTop: "4px",
@@ -110,11 +120,24 @@ const AppListDetails = bundleIcon(
 );
 
 
+const items = [
+  { icon: <Board20Filled />, label: "Mes notes" },
+  { icon: <Board20Filled />, label: "Mes notes" },
+  { icon: <MailAllRead20Filled />, label: "Travail" },
+  { icon: <RibbonStar20Filled />, label: "Favoris" },
+  { icon: <AppsListDetail20Filled />, label: "Recettes" },
+  { icon: <Document20Filled />, label: "Mes documents" },
+  { icon: <Prompt20Filled />, label: "School" },
+  { icon: <Add20Filled />, label: "Nouveau dossier" },
+];
+
+
 const Basic = () => {
   const styles = useStyles();
 
   const [isOpen, setIsOpen] = React.useState(true);
    const [isExpanded, setIsExpanded] = React.useState(false);
+   const [selectedNavitem, setSelectedNavItem]=React.useState('1')
 
   const toggleDrawer = () => setIsExpanded(prev => !prev);
   // Tabster prop used to restore focus to the navigation trigger for overlay nav drawers
@@ -129,7 +152,9 @@ const Basic = () => {
         open={isOpen}
         type="inline"
         data-expanded={isExpanded}
-       // density="medium"
+        onNavItemSelect={(event,data)=>setSelectedNavItem(data.value)}
+       density="medium"
+       selectedValue={selectedNavitem}
          className={isExpanded ? styles.navExpanded : styles.navCollapsed}
       >
         <NavDrawerHeader>
@@ -137,7 +162,7 @@ const Basic = () => {
             
             <Hamburger appearance="subtle" onClick={toggleDrawer} />
        
-          <Label weight="semibold" size="large"  className={!isExpanded ? styles.labelHidden : ""} >Tous</Label>
+          <Text weight="bold" size={400} align="start" block={false}  className={!isExpanded ? styles.labelHidden : ""} >Tous</Text>
           </div>
         </NavDrawerHeader>
 
@@ -190,6 +215,43 @@ const Basic = () => {
             onClick={() => setIsOpen(!isOpen)}
             {...restoreFocusTargetAttributes}
           />}
+
+          <div className={styles.noteContainer}>
+            <Text align="start" block={true} weight="semibold" size={500} style={{
+              marginBottom: tokens.spacingVerticalXL,
+            }} >{items[selectedNavitem].label} </Text>
+            <Input type="text" placeholder="Rechercher dans le dossier" style={{
+              marginBottom: tokens.spacingVerticalL,
+            }} appearance="filled-darker" contentAfter={<Search16Regular></Search16Regular>} />
+          <Text align="start" block={true} truncate={true} style={{
+            color: tokens.colorNeutralBackgroundStatic
+,
+          }} size={300}>
+            Utilisez la recherche pour trouver vos notes rapidement...
+          </Text>
+          <div style={{
+            display: "flex",
+            height: '80%',
+            width:'100%',
+            flexDirection: 'column',
+            justifyContent: "center",
+            alignItems: "center",
+            color: tokens.colorNeutralForegroundDisabled,
+            }}>
+              <Folder48Regular style={{
+                scale: '1.2',
+                marginBottom: tokens.spacingVerticalM
+              }}/>
+<Text block={true}>Ce dossier est vide pour le moment.</Text>
+          </div>
+          </div>
+          <div className={styles.editorContainer}>
+            <div>
+               <Content />
+
+            </div>
+
+          </div>
         
       </div>
     </div>

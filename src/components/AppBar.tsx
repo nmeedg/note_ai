@@ -23,7 +23,9 @@ export const AppBar = (props: Partial<ToolbarProps>) => (
   <Toolbar aria-label="Default" {...props} style={{
     width: '87%',
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: tokens.spacingVerticalM,
   }}>
     <ToolbarButton
       aria-label="App logo"
