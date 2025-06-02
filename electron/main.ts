@@ -28,7 +28,6 @@ let win: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
     width: 1050,
     center: true,
     height:800,
