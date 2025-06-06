@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron'
 //import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -23,19 +23,20 @@ export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
-  
+
 let win: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
     width: 1050,
     center: true,
-    height:800,
+    height: 800,
     vibrancy: 'header',
     titleBarStyle: 'hidden',
     titleBarOverlay: true,
     visualEffectState: 'active',
     autoHideMenuBar: true,
+    frame: true,
     backgroundMaterial: 'mica',
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
@@ -56,6 +57,29 @@ function createWindow() {
   }
 }
 
+const registerIpcEventListeners = () => {
+  ipcMain.on("themeShouldUseDarkColors", (event: IpcMainEvent) => {
+    event.returnValue = nativeTheme.shouldUseDarkColors;
+  });
+
+  ipcMain.handle('dark-mode:toggle', () => {
+    if (nativeTheme.shouldUseDarkColors) {
+      nativeTheme.themeSource = 'light'
+    } else {
+      nativeTheme.themeSource = 'dark'
+    }
+    return nativeTheme.shouldUseDarkColors
+  })
+};
+
+const registerNativeThemeEventListeners = (allBrowserWindows: BrowserWindow[]) => {
+  nativeTheme.addListener("updated", () => {
+    for (const browserWindow of allBrowserWindows) {
+      browserWindow.webContents.send("nativeThemeChanged");
+    }
+  });
+};
+
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
@@ -74,4 +98,10 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+// app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow()
+  registerIpcEventListeners();
+  registerNativeThemeEventListeners(BrowserWindow.getAllWindows());
+})
+

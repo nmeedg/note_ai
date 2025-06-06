@@ -1,4 +1,5 @@
 import * as React from "react";
+import { getTheme } from "@/App";
 import {
   DrawerHeaderTitle,
   makeStyles,
@@ -6,6 +7,9 @@ import {
   useRestoreFocusSource,
   Text,
   ToggleButton,
+  Theme,
+  webDarkTheme,
+  ToolbarButton,
 } from "@fluentui/react-components";
 import {
   Hamburger,
@@ -33,17 +37,18 @@ import {
   FolderOpen20Filled,
   FolderOpen16Regular,
 } from "@fluentui/react-icons";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 const useStyles = makeStyles({
   mydrawer: {
     width: "22.5%",
-    backgroundColor: tokens.colorNeutralBackground1,
+    backgroundColor: tokens.colorNeutralBackground3,
   },
   navitem: {
     backgroundColor: "transparent",
     marginBottom: "0.5rem",
     "&:hover": {
-      backgroundColor: tokens.colorNeutralBackground1Selected,
+      backgroundColor: tokens.colorNeutralBackground3Selected,
     },
   },
 
@@ -72,6 +77,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
   const [selectedValue, setSelectedValue] = React.useState<string>("1");
 
   const [isOpen, setIsOpen] = React.useState(false);
+  const [theme, setTheme] = React.useState<Theme>(getTheme());
+  React.useEffect(() => {
+    window.ipcRenderer.on("nativeThemeChanged", () => setTheme(getTheme()));
+  }, []);
   const handleItemSelect = (
     ev: Event | React.SyntheticEvent<Element, Event>,
     data: OnNavItemSelectData
@@ -86,14 +95,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
     <div
       style={{
         height: "100%",
-        width: "5%",
+        width: "4vw",
+        position: "fixed",
+        top: "0",
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
         borderRightWidth: 1,
         borderRightColor: tokens.colorNeutralStroke3,
         borderRightStyle: "solid",
+        background: tokens.colorNeutralBackground3Pressed,
         gap: 10,
-        backgroundColor: tokens.colorNeutralBackground3,
         padding: tokens.spacingHorizontalM,
         boxSizing: "border-box",
         flexShrink: 0,
@@ -121,12 +133,53 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
                 height: "2rem",
               }}
             ></div>
-            <DrawerHeaderTitle>
-              <Hamburger onClick={() => setIsOpen(false)} />{" "}
-              <Text size={400} weight="bold">
-                Tous
-              </Text>
-            </DrawerHeaderTitle>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <DrawerHeaderTitle>
+                <Hamburger onClick={() => setIsOpen(false)} />{" "}
+                <Text size={400} weight="bold">
+                  Tous
+                </Text>
+              </DrawerHeaderTitle>
+              <div className=" translate-x-5">
+                {theme == webDarkTheme ? (
+                  <ToolbarButton
+                    aria-label="sun"
+                    icon={
+                      <DarkModeSwitch
+                        checked={theme == webDarkTheme ? true : false}
+                        onChange={() => {}}
+                        size={20}
+                      />
+                    }
+                    onClick={() => {
+                      window.ipcRenderer.invoke("dark-mode:toggle");
+                    }}
+                    appearance="subtle"
+                  />
+                ) : (
+                  <ToolbarButton
+                    aria-label="moon"
+                    icon={
+                      <DarkModeSwitch
+                        checked={theme == webDarkTheme ? true : false}
+                        onChange={() => {}}
+                        size={20}
+                      />
+                    }
+                    appearance="subtle"
+                    onClick={() => {
+                      window.ipcRenderer.invoke("dark-mode:toggle");
+                    }}
+                  />
+                )}
+              </div>
+            </div>
           </NavDrawerHeader>
           <NavDrawerBody>
             <NavItem
@@ -238,6 +291,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
         </NavDrawer>
         <div>
           <div
+            id="titlebar"
             style={{
               height: "2.5rem",
             }}
@@ -251,7 +305,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
 
           <ToggleButton
             checked={selectedValue == "1"}
-           onClick={() => {
+            onClick={() => {
               setSelectedValue("1");
               changeFolder("1");
             }}
@@ -281,7 +335,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
           ></ToggleButton>
           <ToggleButton
             checked={selectedValue == "4"}
-           onClick={() => {
+            onClick={() => {
               setSelectedValue("4");
               changeFolder("4");
             }}
@@ -291,7 +345,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
           ></ToggleButton>
           <ToggleButton
             checked={selectedValue == "5"}
-           onClick={() => {
+            onClick={() => {
               setSelectedValue("5");
               changeFolder("5");
             }}

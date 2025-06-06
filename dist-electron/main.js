@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain, nativeTheme } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,6 +18,7 @@ function createWindow() {
     titleBarOverlay: true,
     visualEffectState: "active",
     autoHideMenuBar: true,
+    frame: true,
     backgroundMaterial: "mica",
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
@@ -33,6 +34,26 @@ function createWindow() {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
 }
+const registerIpcEventListeners = () => {
+  ipcMain.on("themeShouldUseDarkColors", (event) => {
+    event.returnValue = nativeTheme.shouldUseDarkColors;
+  });
+  ipcMain.handle("dark-mode:toggle", () => {
+    if (nativeTheme.shouldUseDarkColors) {
+      nativeTheme.themeSource = "light";
+    } else {
+      nativeTheme.themeSource = "dark";
+    }
+    return nativeTheme.shouldUseDarkColors;
+  });
+};
+const registerNativeThemeEventListeners = (allBrowserWindows) => {
+  nativeTheme.addListener("updated", () => {
+    for (const browserWindow of allBrowserWindows) {
+      browserWindow.webContents.send("nativeThemeChanged");
+    }
+  });
+};
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
@@ -44,7 +65,11 @@ app.on("activate", () => {
     createWindow();
   }
 });
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  registerIpcEventListeners();
+  registerNativeThemeEventListeners(BrowserWindow.getAllWindows());
+});
 export {
   MAIN_DIST,
   RENDERER_DIST,

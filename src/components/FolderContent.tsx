@@ -31,8 +31,12 @@ function FolderContent({ currentFolder }: { currentFolder: string }) {
   return (
     <div
       style={{
-        width: "30%",
-        backgroundColor: tokens.colorNeutralBackground1,
+        width: "25vw",
+        position: "fixed",
+        // maxWidth: "350px",
+        marginLeft: "4vw",
+        height: "100%",
+        backgroundColor: tokens.colorNeutralBackground2,
         padding: tokens.spacingHorizontalL,
         display: "flex",
         flexDirection: "column",
@@ -50,7 +54,7 @@ function FolderContent({ currentFolder }: { currentFolder: string }) {
               flexDirection: "column",
             }}
           >
-            <div
+            <div id="titlebar"
               style={{
                 height: "2.5rem",
               }}

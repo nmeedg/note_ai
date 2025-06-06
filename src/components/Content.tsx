@@ -1,62 +1,80 @@
-import { Divider, Menu, MenuItem, MenuList, MenuPopover, MenuTrigger, tokens, Toolbar, ToolbarButton, ToolbarDivider } from "@fluentui/react-components";
-import { FontDecrease24Regular, FontIncrease24Regular, MoreHorizontal24Filled, TextFont24Regular } from "@fluentui/react-icons";
+import {
+  Divider,
+  Theme,
+  Toaster,
+  tokens,
+  useId,
+  webDarkTheme,
+} from "@fluentui/react-components";
+import ToolbarApp from "./Toolbar";
+import { Editor } from "@tiptap/core";
+import { useEffect, useState } from "react";
+import defaultContent from "@/assets/default-content.json";
+import { BlockEditor } from "./editor";
+import { getTheme } from "@/App";
 
 function Content() {
+  const [editor, setEditor] = useState<Editor>();
+  const toasterId = useId("toaster");
+
+  const [theme, setTheme] = useState<Theme>(getTheme());
+  useEffect(() => {
+    window.ipcRenderer.on("nativeThemeChanged", () => setTheme(getTheme()));
+  }, []);
+
   return (
     <div
       style={{
         width: "100%",
-        padding: "1rem",
         display: "flex",
+        overflow: "scroll",
         flexDirection: "column",
         justifyContent: "flex-start",
-        backgroundColor: tokens.colorNeutralBackground1,
+        backgroundColor: theme == webDarkTheme ? tokens.colorNeutralBackground2Pressed : tokens.colorNeutralBackground1,
       }}
     >
-      <div>
+      <div
+        style={{
+          // padding: "1rem",
+          zIndex: 10,
+          backgroundColor: theme == webDarkTheme ? tokens.colorNeutralBackground2Pressed : tokens.colorNeutralBackground1,
+          position: "absolute",
+          top: "0",
+        }}
+      >
         <div
+          id="titlebar"
           style={{
-            height: "2.5rem",
+            height: "3.5rem",
           }}
         ></div>
-        <Toolbar aria-label="Default">
-          <ToolbarButton
-            aria-label="Increase Font Size"
-            appearance="primary"
-            icon={<FontIncrease24Regular />}
-          />
-          <ToolbarButton
-            aria-label="Decrease Font Size"
-            icon={<FontDecrease24Regular />}
-          />
-          <ToolbarButton
-            aria-label="Reset Font Size"
-            icon={<TextFont24Regular />}
-          />
-          <ToolbarDivider />
-          <Menu>
-            <MenuTrigger>
-              <ToolbarButton
-                aria-label="More"
-                icon={<MoreHorizontal24Filled />}
-              />
-            </MenuTrigger>
-
-            <MenuPopover>
-              <MenuList>
-                <MenuItem>New </MenuItem>
-                <MenuItem>New Window</MenuItem>
-                <MenuItem disabled>Open File</MenuItem>
-                <MenuItem>Open Folder</MenuItem>
-              </MenuList>
-            </MenuPopover>
-          </Menu>
-        </Toolbar>
-        <Divider></Divider>
+        <ToolbarApp editor={editor} />
+        <Divider
+          style={{
+            marginTop: "0.4rem",
+          }}
+        ></Divider>
       </div>
-      <div style={{
-        paddingTop: "1rem"
-      }}>vContent of note</div>
+      <div
+        style={{
+          marginTop: "6rem",
+          zIndex: 0,
+        }}
+      >
+        <div
+          className="w-full pb-8 pt-4 px-3"
+          style={{
+            height: "calc(100vh - 7.1rem)",
+          }}
+        >
+          <BlockEditor
+            content={defaultContent}
+            onCreate={setEditor}
+            onUpdate={setEditor}
+          ></BlockEditor>
+        </div>
+      </div>
+      <Toaster toasterId={toasterId} />
     </div>
   );
 }

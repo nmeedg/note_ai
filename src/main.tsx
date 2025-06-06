@@ -1,10 +1,11 @@
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { FluentProvider, webLightTheme } from "@fluentui/react-components"
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./styles/index.css";
+import "katex/dist/katex.min.css";
+import "./styles/block-editor.css";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <FluentProvider theme={webLightTheme} style={{ height: "100vh", overflow: 'hidden', background: "transparent"}} >
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <>
     <App />
-  </FluentProvider>,
-)
+  </>
+);
