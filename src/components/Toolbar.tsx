@@ -26,10 +26,6 @@ import {
   TaskListLtr20Regular,
   TextBoldRegular,
   TextBulletListLtr20Regular,
-  TextHeader120Regular,
-  TextHeader1Lines20Regular,
-  TextHeader2Lines20Regular,
-  TextHeader3Lines20Regular,
   TextItalicRegular,
   TextNumberListLtr20Regular,
   TextStrikethrough20Regular,
@@ -38,6 +34,7 @@ import {
   TextUnderlineRegular,
 } from "@fluentui/react-icons";
 import { Editor } from "@tiptap/core";
+import { Heading, Heading1Icon, Heading2Icon, Heading3Icon } from "lucide-react";
 
 const useStyle = makeStyles({
   rootTool: {
@@ -55,7 +52,7 @@ interface EditorProps {
 
 function ToolbarApp({ editor }: EditorProps) {
   const styles = useStyle();
-  console.log(editor);
+  // console.log(editor);
 
 
   return (
@@ -64,12 +61,20 @@ function ToolbarApp({ editor }: EditorProps) {
         <ToolbarButton
           aria-label="Undo"
           appearance="subtle"
+          disabled={!editor?.can().undo()}
+          onClick={()=>{
+            editor?.commands.undo()
+          }}
           icon={<ArrowReply20Regular />}
         />
         <ToolbarButton
           aria-label="Redo"
           style={{
             transform: "scaleX(-1)",
+          }}
+          disabled={!editor?.can().redo()}
+          onClick={()=>{
+            editor?.commands.redo()
           }}
           icon={<ArrowReply20Regular />}
         />
@@ -81,14 +86,14 @@ function ToolbarApp({ editor }: EditorProps) {
               style={{
                 margin: "0 0.3rem",
               }}
-              icon={<TextHeader120Regular />}
+              icon={<Heading size={16} />}
             />
           </MenuTrigger>
           <MenuPopover>
             <MenuList>
-              <MenuItem icon={<TextHeader1Lines20Regular />}>Header 1</MenuItem>
-              <MenuItem icon={<TextHeader2Lines20Regular />}>Header 2</MenuItem>
-              <MenuItem icon={<TextHeader3Lines20Regular />}>Header 3</MenuItem>
+              <MenuItem icon={<Heading1Icon size={16} />}>Header 1</MenuItem>
+              <MenuItem icon={<Heading2Icon size={16} />}>Header 2</MenuItem>
+              <MenuItem icon={<Heading3Icon size={16} />}>Header 3</MenuItem>
             </MenuList>
           </MenuPopover>
         </Menu>
