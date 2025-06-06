@@ -1,30 +1,65 @@
-# React + TypeScript + Vite
+# 🧠 Notes AI — Prise de Notes Augmentée par l’IA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **Une révolution cognitive open-source** : prise de notes intelligente, auto-structurée, interconnectée et évolutive. Propulsée par IA, optimisée pour votre mémoire.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 À propos du projet
 
-## Expanding the ESLint configuration
+**Neural Notes** est une application de prise de notes nouvelle génération, combinant :
+- Structuration automatique par IA (titres, tags, liens, arborescences)
+- Graphe sémantique dynamique des idées
+- Collaboration assistée par l’IA
+- Embedding contextuel intelligent
+- Versioning évolutif des notes
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Inspirée d’Obsidian, Notion, Logseq, Bear, Mem.ai et augmentée d’intelligence artificielle, Neural Notes vise à devenir **l’interface entre votre pensée, votre mémoire et votre avenir intellectuel.**
 
-- Configure the top-level `parserOptions` property like this:
+---
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## ✨ Fonctionnalités principales
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+| Module | Description |
+|--------|-------------|
+| 🧠 Auto-Structuration | Analyse sémantique et contextuelle des notes, génération automatique d’outline, tags, backlinks |
+| 🕸️ Graphe Cognitif | Visualisation évolutive des relations entre concepts, timeline, clusters thématiques |
+| 📌 Embedding Contextuel | Insertion intelligente dans Slack, Notion, Web, etc. avec adaptation automatique |
+| 🧬 Historique & Versioning | Suivi de l’évolution des idées, système de branches et de révisions |
+| 🤝 Collaboration IA | Edition multi-utilisateur, fusion intelligente de contenu, suggestions croisées |
+| 🎧 Transcription & OCR | Conversion automatique d’audio et d’images en notes exploitables |
+| 📚 Apprentissage personnel | Quiz auto-générés, fiches de révision, synthèses hebdomadaires |
+
+---
+
+## 📐 Architecture Technique
+
+- **Frontend** : `SvelteKit` + `Tailwind CSS`
+- **Application Desktop** : `Electron.js`
+- **Backend** : `Node.js` (serveur local intégré à Electron)
+- **Stockage** :
+  - Notes : `Markdown` + `YAML`
+  - Base locale : `SQLite` via `better-sqlite3` ou `Dexie.js`
+  - Option Cloud : `PostgreSQL` (future synchronisation)
+- **IA** :
+  - Embedding : `OpenAI API` ou modèle local `LLaMA 3`
+  - NLP : `LangChain`, `spaCy`, `transformers`
+  - Transcription audio : `Whisper API`
+  - OCR : `Tesseract.js`
+- **Synchronisation** : `Syncthing` (P2P, E2E)
+
+---
+
+## ⚙️ Installation (mode développeur)
+
+> Prérequis : `Node.js`, `pnpm`, `Python3` (pour NLP), `Electron`
+
+```bash
+# 1. Cloner le repo
+git clone https://github.com/nmeedg/note_ai.git
+cd note_ai
+
+# 2. Installer les dépendances
+yarn install
+
+# 3. Lancer le mode développement Electron
+yarn run dev
