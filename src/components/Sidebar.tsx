@@ -104,9 +104,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
         borderRightWidth: 1,
         borderRightColor: tokens.colorNeutralStroke3,
         borderRightStyle: "solid",
-        background: tokens.colorNeutralBackground3Pressed,
+        background: tokens.colorNeutralBackground2Pressed,
         gap: 10,
-        padding: tokens.spacingHorizontalM,
+        padding: tokens.spacingHorizontalXL,
         boxSizing: "border-box",
         flexShrink: 0,
       }}
@@ -142,6 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
             >
               <DrawerHeaderTitle>
                 <Hamburger onClick={() => setIsOpen(false)} />{" "}
+                
                 <Text size={400} weight="bold">
                   Tous
                 </Text>

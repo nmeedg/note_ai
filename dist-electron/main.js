@@ -15,7 +15,7 @@ function createWindow() {
     height: 800,
     vibrancy: "header",
     titleBarStyle: "hidden",
-    titleBarOverlay: true,
+    // titleBarOverlay: true,
     visualEffectState: "active",
     autoHideMenuBar: true,
     frame: true,
@@ -23,7 +23,12 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
       contextIsolation: true
-    }
+    },
+    ...process.platform !== "darwin" ? {
+      titleBarOverlay: {
+        color: "#ffffff"
+      }
+    } : {}
   });
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
@@ -33,6 +38,7 @@ function createWindow() {
   } else {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
+  return win;
 }
 const registerIpcEventListeners = () => {
   ipcMain.on("themeShouldUseDarkColors", (event) => {
@@ -51,6 +57,17 @@ const registerNativeThemeEventListeners = (allBrowserWindows) => {
   nativeTheme.addListener("updated", () => {
     for (const browserWindow of allBrowserWindows) {
       browserWindow.webContents.send("nativeThemeChanged");
+      if (!nativeTheme.shouldUseDarkColors) {
+        browserWindow.setTitleBarOverlay({
+          color: "#ffffff",
+          symbolColor: "#000000"
+        });
+      } else {
+        browserWindow.setTitleBarOverlay({
+          color: "#141414",
+          symbolColor: "#d6d6d6"
+        });
+      }
     }
   });
 };

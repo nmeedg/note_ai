@@ -30,7 +30,7 @@ function Content() {
         overflow: "scroll",
         flexDirection: "column",
         justifyContent: "flex-start",
-        backgroundColor: theme == webDarkTheme ? tokens.colorNeutralBackground2Pressed : tokens.colorNeutralBackground1,
+        backgroundColor: theme == webDarkTheme ? tokens.colorNeutralBackground3 : tokens.colorNeutralBackground1,
       }}
     >
       <div

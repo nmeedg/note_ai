@@ -33,7 +33,7 @@ function createWindow() {
     height: 800,
     vibrancy: 'header',
     titleBarStyle: 'hidden',
-    titleBarOverlay: true,
+    // titleBarOverlay: true,
     visualEffectState: 'active',
     autoHideMenuBar: true,
     frame: true,
@@ -42,6 +42,12 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.mjs'),
       contextIsolation: true,
     },
+    ...(process.platform !== 'darwin' ? {
+      titleBarOverlay: {
+        color: "#ffffff"
+      }
+    } : {})
+
   })
 
   // Test active push message to Renderer-process.
@@ -55,6 +61,7 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
+  return win
 }
 
 const registerIpcEventListeners = () => {
@@ -76,6 +83,17 @@ const registerNativeThemeEventListeners = (allBrowserWindows: BrowserWindow[]) =
   nativeTheme.addListener("updated", () => {
     for (const browserWindow of allBrowserWindows) {
       browserWindow.webContents.send("nativeThemeChanged");
+      if (!nativeTheme.shouldUseDarkColors) {
+        browserWindow.setTitleBarOverlay({
+          color: "#ffffff",
+          symbolColor: "#000000"
+        })
+      } else {
+        browserWindow.setTitleBarOverlay({
+          color: "#141414",
+          symbolColor: "#d6d6d6"
+        })
+      }
     }
   });
 };
