@@ -26,7 +26,6 @@ export const LinkSelector = ({ editor }: { editor: Editor }) => {
     <Menu positioning="above">
       <MenuTrigger>
         <Button appearance="subtle" icon={<LinkMultiple20Regular />} disabled={editorState.isMath}>
-          
         </Button>
       </MenuTrigger>
       <MenuPopover>
@@ -69,7 +68,7 @@ export const LinkSelector = ({ editor }: { editor: Editor }) => {
              
             </Button>
           ) : (
-            <Button appearance="primary" icon={<CheckIcon className="size-4" />}>
+            <Button appearance="primary" type="submit" icon={<CheckIcon className="size-4" />}>
               
             </Button>
           )}

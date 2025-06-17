@@ -26,21 +26,6 @@
         },
         {
           "type": "text",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://tiptap.dev/",
-                "target": "_blank",
-                "rel": "noopener noreferrer nofollow",
-                "class": "!text-foreground underline underline-offset-[3px] transition-colors cursor-pointer"
-              }
-            }
-          ],
-          "text": "Tiptap"
-        },
-        {
-          "type": "text",
           "text": " + "
         },
         {
@@ -52,7 +37,7 @@
                 "href": "https://sdk.vercel.ai/",
                 "target": "_blank",
                 "rel": "noopener noreferrer nofollow",
-                "class": "!text-foreground underline underline-offset-[3px] transition-colors cursor-pointer"
+                "class": "underline underline-offset-[3px] transition-colors cursor-pointer"
               }
             }
           ],
@@ -71,7 +56,7 @@
                 "href": "https://ui.shadcn.com/",
                 "target": "_blank",
                 "rel": "noopener noreferrer nofollow",
-                "class": "!text-foreground underline underline-offset-[3px] transition-colors cursor-pointer"
+                "class": "underline underline-offset-[3px] transition-colors cursor-pointer"
               }
             }
           ],
@@ -90,7 +75,7 @@
                 "href": "https://tailwindcss.com/",
                 "target": "_blank",
                 "rel": "noopener noreferrer nofollow",
-                "class": "!text-foreground underline underline-offset-[3px] transition-colors cursor-pointer"
+                "class": "underline-offset-[3px] transition-colors cursor-pointer"
               }
             }
           ],
@@ -617,5 +602,6 @@
         "height": 480
       }
     }
+    
   ]
 }

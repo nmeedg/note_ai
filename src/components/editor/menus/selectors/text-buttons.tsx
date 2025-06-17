@@ -2,9 +2,19 @@ import { Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
 import { LinkSelector } from "./link-selector";
 import { Button } from "@/components/ui/button";
-import { Toolbar, ToolbarProps, ToolbarToggleButton } from "@fluentui/react-components";
+import {
+  Toolbar,
+  ToolbarProps,
+  ToolbarToggleButton,
+} from "@fluentui/react-components";
 import { useState } from "react";
-import { Code20Regular, TextBold20Regular, TextItalic20Regular, TextStrikethrough20Regular, TextUnderline20Regular } from "@fluentui/react-icons";
+import {
+  Code20Regular,
+  TextBold20Regular,
+  TextItalic20Regular,
+  TextStrikethrough20Regular,
+  TextUnderline20Regular,
+} from "@fluentui/react-icons";
 
 interface SelectorResult {
   isBold: boolean;
@@ -91,24 +101,28 @@ export const TextButtons = ({ editor }: { editor: Editor }) => {
       {items.map((item, i) => {
         return (
           <Button
+            key={"bubble-button-" + i}
             variant="ghost"
             size="icon"
             disabled={editorState.isMath}
             className="rounded-none flex-shrink-0"
-            
           >
             <ToolbarToggleButton
               aria-label="Bold"
               key={i}
-              icon={<item.icon style={{
-                color: item.isActive(editorState) ? "var(--primary)" : ""
-              }} />}
+              icon={
+                <item.icon
+                  style={{
+                    color: item.isActive(editorState) ? "var(--primary)" : "",
+                  }}
+                />
+              }
               name="textOptions"
               appearance="subtle"
               value={i.toString()}
               onClick={() => {
-              item.onClick(editor);
-            }}
+                item.onClick(editor);
+              }}
             />
           </Button>
         );

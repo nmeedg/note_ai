@@ -118,7 +118,8 @@ app.on('activate', () => {
 
 // app.whenReady().then(createWindow)
 app.whenReady().then(() => {
-  createWindow()
+  const windowCopy = createWindow()
+  windowCopy.webContents.openDevTools();
   registerIpcEventListeners();
   registerNativeThemeEventListeners(BrowserWindow.getAllWindows());
 })

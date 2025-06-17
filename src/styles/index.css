@@ -56,7 +56,7 @@
   --muted-foreground: oklch(0.705 0.015 286.067);
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --destructive: oklch(66.79% 0.21426 24.266);
   --success: oklch(0.63 0.17 149);
   --warning: oklch(0.84 0.16 84);
   --border: oklch(1 0 0 / 10%);
@@ -156,4 +156,55 @@ html body[data-scroll-locked] {
 #titlebar {
   user-select: none;
   app-region: drag;
+}
+ul[data-type="taskList"] {
+  @apply list-none p-0 m-0;
+}
+
+ul[data-type="taskList"] > li {
+  @apply flex items-baseline gap-3 w-full;
+}
+
+ul[data-type="taskList"] > li > label {
+  @apply flex items-center cursor-pointer;
+}
+
+/* On masque l'input natif (le vrai checkbox de tiptap) */
+ul[data-type="taskList"] input[type="checkbox"] {
+  @apply sr-only;
+}
+
+/* Style cercle vide */
+ul[data-type="taskList"] > li:not([data-checked="true"]) > label::before {
+  content: "";
+  @apply w-[14px] h-[14px] rounded-full border-2 border-ring flex-shrink-0;
+}
+
+/* Style cercle rempli avec check (checked) */
+ul[data-type="taskList"] > li[data-checked="true"] > label::before {
+  content: "✓";
+  @apply w-[14px] h-[14px] rounded-full bg-primary text-background text-[9px] font-bold flex items-center justify-center;
+}
+
+/* Texte barré si tâche cochée */
+ul[data-type="taskList"] > li[data-checked="true"] p {
+  @apply line-through text-destructive;
+}
+
+/* Texte normal */
+ul[data-type="taskList"] p {
+  @apply m-0 text-base leading-snug;
+}
+
+p.text-left {
+  @apply text-left;
+}
+p.text-center {
+  @apply text-center;
+}
+p.text-right {
+  @apply text-right;
+}
+p.text-justify {
+  @apply text-justify;
 }

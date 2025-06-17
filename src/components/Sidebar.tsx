@@ -1,5 +1,6 @@
 import * as React from "react";
 import { getTheme } from "@/App";
+import { motion } from "motion/react";
 import {
   DrawerHeaderTitle,
   makeStyles,
@@ -141,8 +142,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
               }}
             >
               <DrawerHeaderTitle>
-                <Hamburger onClick={() => setIsOpen(false)} />{" "}
-                
+                <motion.div whileTap={{ scale: 0.8 }} >
+                  <Hamburger onClick={() => setIsOpen(false)} />
+                </motion.div>{" "}
                 <Text size={400} weight="bold">
                   Tous
                 </Text>
@@ -297,12 +299,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ changeFolder }) => {
               height: "2.5rem",
             }}
           ></div>
-          <Hamburger
-            style={{
-              marginBottom: "1rem",
-            }}
-            onClick={() => setIsOpen(true)}
-          />
+          <motion.div whileTap={{ scale: 0.8 }}>
+            <Hamburger
+              style={{
+                marginBottom: "1rem",
+              }}
+              onClick={() => setIsOpen(true)}
+            />
+          </motion.div>
 
           <ToggleButton
             checked={selectedValue == "1"}

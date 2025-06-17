@@ -21,6 +21,8 @@ import { AiWriter } from "./extensions/ai-writer";
 import { CustomCodeBlock } from "./extensions/code-block";
 import { Mathematics } from "./extensions/mathematics";
 import { common, createLowlight } from "lowlight";
+import Color from '@tiptap/extension-color'
+
 
 const TiptapStarterKit = StarterKit.configure({
   bulletList: {
@@ -61,6 +63,10 @@ const TiptapStarterKit = StarterKit.configure({
     color: "#DBEAFE",
     width: 4,
   },
+  history: {
+    depth: 10,
+    newGroupDelay: 1000
+  },
   // gapcursor: false,
   heading: false,
 });
@@ -97,11 +103,11 @@ const lowlight = createLowlight(common);
 const codeBlock = CustomCodeBlock.configure({
   HTMLAttributes: {
     class: cn(
-      "rounded !bg-gray-800 dark:!bg-gray-900 text-gray-200 border p-5 font-mono font-medium"
+      "rounded-lg !bg-gray-800 dark:!bg-gray-900 text-gray-200 border p-5 font-mono font-medium"
     ),
     spellcheck: false,
   },
-  defaultLanguage: "plaintext",
+  defaultLanguage: "xml",
   lowlight: lowlight
 });
 
@@ -160,14 +166,70 @@ const TiptapTableCell = TableCell.configure({
 const TiptapLink = Link.configure({
   HTMLAttributes: {
     class: cn(
-      "!text-foreground underline underline-offset-[3px] transition-colors cursor-pointer"
+      "relative text-blue-600 transition duration-300 before:absolute before:inset-x-0 before:-bottom-1 before:h-0.5 before:origin-left before:scale-x-0 before:bg-blue-600 hover:before:scale-x-100 before:transition-transform"
     ),
   },
   openOnClick: false,
+  autolink: true,
+  defaultProtocol: 'https',
+  protocols: ['ftp', 'mailto', 'http','https'],
+  isAllowedUri: (url, ctx) => {
+    try {
+      // construct URL
+      const parsedUrl = url.includes(':') ? new URL(url) : new URL(`${ctx.defaultProtocol}://${url}`)
+
+      // use default validation
+      if (!ctx.defaultValidate(parsedUrl.href)) {
+        return false
+      }
+
+      // disallowed protocols
+      const disallowedProtocols = ['file']
+      const protocol = parsedUrl.protocol.replace(':', '')
+
+      if (disallowedProtocols.includes(protocol)) {
+        return false
+      }
+
+      // only allow protocols specified in ctx.protocols
+      const allowedProtocols = ctx.protocols.map(p => (typeof p === 'string' ? p : p.scheme))
+
+      if (!allowedProtocols.includes(protocol)) {
+        return false
+      }
+
+      // disallowed domains
+      const disallowedDomains = ['example-phishing.com', 'malicious-site.net']
+      const domain = parsedUrl.hostname
+
+      if (disallowedDomains.includes(domain)) {
+        return false
+      }
+
+      // all checks have passed
+      return true
+    } catch {
+      return false
+    }
+  },
+  shouldAutoLink: url => {
+    try {
+      // construct URL
+      const parsedUrl = url.includes(':') ? new URL(url) : new URL(`https://${url}`)
+
+      // only auto-link if the domain is not in the disallowed list
+      const disallowedDomains = ['example-no-autolink.com', 'another-no-autolink.com']
+      const domain = parsedUrl.hostname
+
+      return !disallowedDomains.includes(domain)
+    } catch {
+      return false
+    }
+  }
 });
 
 const TiptapImage = Image.configure({
-  allowBase64: false,
+  allowBase64: true,
   HTMLAttributes: {
     class: cn("rounded border mx-auto"),
   },
@@ -222,7 +284,8 @@ export const defaultExtensions = [
   TiptapCharacterCount,
   TiptapImage,
   Underline,
-  TextStyle,
+  TextStyle.configure({ mergeNestedSpanStyles: true }),
+  Color,
   mathematics,
   codeBlock,
   DragHandle,
